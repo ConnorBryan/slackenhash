@@ -29,31 +29,35 @@ namespace Slackenhash.UI
             prompt = new UITextPanel<string>(text, 1f);
             prompt.Top.Percent = 0.45f;
             prompt.Left.Percent = 0.4f;
-            prompt.Height.Pixels = 30 + lineCount * 20;
+            prompt.Height.Pixels = 30 + lineCount * 30;
 
             int optionIndex = 0;
             float optionSize = 0;
             foreach ((string, MouseEvent) option in options)
             {
-                UITextPanel<string> optionButton = new UITextPanel<string>(option.Item1, 0.67f);
-                optionButton.Top.Set(0, 1f);
-                optionButton.Left.Pixels = (43 * optionIndex);
-                optionButton.OnMouseDown += option.Item2;
+                if (option.Item1 != "...")
+                {
+                    UITextPanel<string> optionButton = new UITextPanel<string>(option.Item1, 0.67f);
+                    optionButton.Top.Set(0, 0.8f);
+                    optionButton.Left.Pixels = (43 * optionIndex);
+                    optionButton.OnMouseDown += new MouseEvent(option.Item2);
 
-                prompt.Append(optionButton);
+                    prompt.Append(optionButton);
 
-                optionSize += optionButton.Width.Pixels;
+                    optionSize += optionButton.Width.Pixels;
 
-                optionIndex++;
+                    optionIndex++;
+                }
             }
 
             prompt.Width.Pixels = optionSize;
 
             countdown = new UIText(FramesToString(), 2f, true);
 
-            prompt.Append(countdown);
+            Append(countdown);
 
-            countdown.Left.Percent = -0.3f;
+            countdown.Top.Pixels = 20;
+            countdown.Left.Percent = 0.9f;
 
             Append(prompt);
 
@@ -74,8 +78,11 @@ namespace Slackenhash.UI
 
                     ticking = false;
 
-                    // The default option is the first one.
-                    options[0].Item2(null, null);
+                    if (options.Count > 0)
+                    {
+                       // The default option is the first one.
+                        options[0].Item2(null, null);
+                    }
                 }
             }
         }

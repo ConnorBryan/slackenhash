@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.IO;
+using Terraria.UI;
 using Microsoft.Xna.Framework;
 
 namespace Slackenhash
@@ -39,8 +40,6 @@ namespace Slackenhash
             history = new History();
 
             Reset();
-
-            history.Log("A new game was started.");
 
             // Add and shuffle players.
             foreach (PlayerFileData data in Main.PlayerList)
@@ -99,10 +98,19 @@ namespace Slackenhash
                 }
             }
 
+            history.Log("A new game was started.");
+
             // Kick things off.
             inProgress = true;
             roundCount++;
 
+            Slackenhash.instance.ShowPrompt("A new game of Slackenhash has started!", new List<(string, UIElement.MouseEvent)>{
+                ("...", Continue)
+            }, 10);
+        }
+
+        private void Continue(UIMouseEvent evt, UIElement listener)
+        {
             Tick();
         }
 
@@ -131,9 +139,11 @@ namespace Slackenhash
             }
         }
 
-        public void FinishTurn()
+        public void FinishTurn(UIMouseEvent evt, UIElement listener)
         {
             readyForNextTurn = true;
+
+            Tick();
         }
 
         public Card DrawCard(SlackenhashPlayer player, Slackenhash.CardKind deck)

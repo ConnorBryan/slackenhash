@@ -46,20 +46,23 @@ namespace Slackenhash
         public void TakeTurn()
         {
             Slackenhash.instance.AddHistoryLog(player.name + " started their turn.");
-
-            AdvanceChamber();
+            Slackenhash.instance.ShowPrompt(player.name + ", you're up!", new List<(string, UIElement.MouseEvent)>{
+                ("...", AdvanceChamber)
+            }, 5);
         }
 
-        private void AdvanceChamber()
+        private void AdvanceChamber(UIMouseEvent evt, UIElement listener)
         {
             Slackenhash.instance.AddHistoryLog(player.name + " entered a chamber.");
 
             phase = Slackenhash.Phase.BreachingTheChamber;
 
-            DrawCard();
+            Slackenhash.instance.ShowPrompt(player.name + " approaches the chamber door...", new List<(string, UIElement.MouseEvent)>{
+                ("...", DrawCard)
+            }, 5);
         }
 
-        private void DrawCard()
+        private void DrawCard(UIMouseEvent evt, UIElement listener)
         {
             Card drawnCard = Slackenhash.instance.game.DrawCard(this, Slackenhash.CardKind.Chamber);
 
@@ -100,35 +103,49 @@ namespace Slackenhash
 
         private void Run(UIMouseEvent evt, UIElement listener)
         {
-            Slackenhash.instance.Logger.Debug("Ran");
+            Slackenhash.instance.Logger.Debug('X');
+            Slackenhash.instance.ShowPrompt(player.name + " runs away screaming!", new List<(string, UIElement.MouseEvent)>{
+                ("...", FinishTurn)
+            }, 10);
         }
 
         private void Cry(UIMouseEvent evt, UIElement listener)
         {
-            Slackenhash.instance.Logger.Debug("Cried");
+            Slackenhash.instance.Logger.Debug('Y');
+            Slackenhash.instance.ShowPrompt(player.name + " cried for help!", new List<(string, UIElement.MouseEvent)>{
+                ("...", Fight)
+            }, 10);
         }
 
         private void Fight(UIMouseEvent evt, UIElement listener)
         {
-            Slackenhash.instance.Logger.Debug("Fought");
+            Slackenhash.instance.Logger.Debug('Z');
+            Slackenhash.instance.ShowPrompt(player.name + " steps up to the plate!", new List<(string, UIElement.MouseEvent)>{
+                ("...", FinishTurn)
+            }, 30);
         }
 
         private void Lurk(UIMouseEvent evt, UIElement listener)
         {
-            Slackenhash.instance.Logger.Debug("Lurked");
+            Slackenhash.instance.ShowPrompt(player.name + " is looking for a fight!", new List<(string, UIElement.MouseEvent)>{
+                ("...", FinishTurn)
+            }, 10);
         }
 
         private void Loot(UIMouseEvent evt, UIElement listener)
         {
-            Slackenhash.instance.Logger.Debug("Looted");
-            phase = Slackenhash.Phase.SheddingWeight;
+            Slackenhash.instance.ShowPrompt(player.name + " is taking what they can get.", new List<(string, UIElement.MouseEvent)>{
+                ("...", FinishTurn)
+            }, 10);
         }
 
-        private void FinishTurn()
+        private void FinishTurn(UIMouseEvent evt, UIElement listener)
         {
-            phase = Slackenhash.Phase.Waiting;
+            phase = Slackenhash.Phase.SheddingWeight;
 
-            Slackenhash.instance.game.FinishTurn();
+            Slackenhash.instance.ShowPrompt(player.name + " is loosening their load.", new List<(string, UIElement.MouseEvent)>{
+                ("...", Slackenhash.instance.game.FinishTurn)
+            }, 15);
         }
     }
 }

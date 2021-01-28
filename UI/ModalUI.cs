@@ -1,5 +1,6 @@
 ﻿using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
 
 namespace Slackenhash.UI
 {
@@ -10,6 +11,8 @@ namespace Slackenhash.UI
         private string title;
         private UIElement element;
         private bool dismissable;
+        private UIScrollbar scrollbar;
+        private float scrollDistance = 0;
 
         public ModalUI(string _title, UIElement _element, bool _dismissable = true)
         {
@@ -20,11 +23,12 @@ namespace Slackenhash.UI
 
         public override void OnInitialize()
         {
-            modal = new DragableUIPanel();
+            modal = new DragableUIPanel(200);
             modal.Top.Percent = 0.45f;
             modal.Left.Percent = 0.45f;
             modal.Width.Pixels = Slackenhash.CARD_WIDTH;
             modal.Height.Pixels = Slackenhash.CARD_WIDTH * Slackenhash.CARD_HEIGHT_TO_WIDTH_RATIO;
+            modal.OverflowHidden = true;
             modal.SetPadding(0);
 
             UIPanel top = new UIPanel();
@@ -52,10 +56,16 @@ namespace Slackenhash.UI
             }
 
             modal.Append(top);
+            modal.OnScrollWheel += new ScrollWheelEvent(ScrollWheel);
+
+            element.Top.Pixels = -scrollDistance;
 
             Add(element);
 
+            AddScrollbar();
+
             Append(modal);
+
         }
 
         public void Add(UIElement element)
@@ -64,13 +74,50 @@ namespace Slackenhash.UI
             element.Top.Percent = 0;
             element.Left.Pixels = 0;
             element.Left.Percent = 0;
-
+            scrollbar?.SetView(0f, 300f);
             modal.Append(element);
+        }
+
+        private void AddScrollbar()
+        {
+            scrollbar = new UIScrollbar();
+            scrollbar.Top.Percent = 0.1f;
+            scrollbar.Left.Percent = 0.9f;
+            scrollbar.Width.Percent = 0.05f;
+            scrollbar.Height.Pixels = element.Height.Pixels - 20;
+            scrollbar.SetView(element.Height.Pixels, 200f);
+            scrollbar.OnScrollWheel += new ScrollWheelEvent(ScrollWheel);
+            modal.Append(scrollbar);
         }
 
         private void OnClose(UIMouseEvent evt, UIElement listener)
         {
             Slackenhash.instance.HideModal();
+        }
+
+        public void ScrollWheel(UIScrollWheelEvent evt, UIElement listener)
+        {
+            if (evt.ScrollWheelValue >= 0)
+            {
+                // Up
+                scrollDistance -= 5;
+
+                if (scrollDistance <= 0)
+                {
+                    scrollDistance = 0;
+                }
+            } else
+            {
+                // Down
+                scrollDistance += 5;
+
+                if (scrollDistance >= element.Height.Pixels)
+                {
+                    scrollDistance = element.Height.Pixels;
+                }
+            }
+
+            element.Top.Pixels = -scrollDistance + 20;
         }
     }
 }

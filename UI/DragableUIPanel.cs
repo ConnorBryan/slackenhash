@@ -16,6 +16,11 @@ namespace Slackenhash.UI
 		private Vector2 offset;
 		public bool dragging;
 
+		public DragableUIPanel(int _height)
+        {
+			Height.Pixels = _height;
+        }
+
 		public override void MouseDown(UIMouseEvent evt)
 		{
 			base.MouseDown(evt);
