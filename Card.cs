@@ -1,4 +1,7 @@
-﻿namespace Slackenhash
+﻿using Terraria;
+using Terraria.UI;
+
+namespace Slackenhash
 {
     public class Card
     {
@@ -9,6 +12,7 @@
         public int power;
         public Slackenhash.EquipmentSlot slot;
         public int value;
+        public Equipment item;
         public bool isBig;
 
         public Card(
@@ -19,6 +23,7 @@
             int _power,
             Slackenhash.EquipmentSlot _slot,
             int _value,
+            Equipment _item,
             bool _isBig = false
         )
         {
@@ -29,6 +34,7 @@
             power = _power;
             slot = _slot;
             value = _value;
+            item = _item;
             isBig = _isBig;
         }
 
@@ -43,6 +49,16 @@
             } else
             {
                 return base.ToString();
+            }
+        }
+
+        public void OnPrimary(UIMouseEvent evt, UIElement listener)
+        {
+            if (subkind == Slackenhash.CardSubkind.Equipment)
+            {
+                SlackenhashPlayer player = Main.LocalPlayer.GetModPlayer<SlackenhashPlayer>();
+
+                player.EquipItem(item);
             }
         }
     }

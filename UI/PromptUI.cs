@@ -27,9 +27,7 @@ namespace Slackenhash.UI
             int lineCount = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length;
 
             prompt = new UITextPanel<string>(text, 1f);
-            prompt.Top.Percent = 0.45f;
-            prompt.Left.Percent = 0.4f;
-            prompt.Height.Pixels = 30 + lineCount * 30;
+            prompt.Height.Pixels = lineCount * 30;
 
             int optionIndex = 0;
             float optionSize = 0;
@@ -37,10 +35,11 @@ namespace Slackenhash.UI
             {
                 if (option.Item1 != "...")
                 {
-                    UITextPanel<string> optionButton = new UITextPanel<string>(option.Item1, 0.67f);
-                    optionButton.Top.Set(0, 0.8f);
-                    optionButton.Left.Pixels = (43 * optionIndex);
+                    UITextPanel<string> optionButton = new UITextPanel<string>(option.Item1.ToUpper(), 0.67f);
+                    optionButton.Top.Percent = 1.2f;
+                    optionButton.HAlign = (1.0f / options.Count) * optionIndex;
                     optionButton.OnMouseDown += new MouseEvent(option.Item2);
+                    optionButton.SetPadding(10f);
 
                     prompt.Append(optionButton);
 
@@ -50,14 +49,16 @@ namespace Slackenhash.UI
                 }
             }
 
-            prompt.Width.Pixels = optionSize;
-
             countdown = new UIText(FramesToString(), 2f, true);
 
             Append(countdown);
 
-            countdown.Top.Pixels = 20;
-            countdown.Left.Percent = 0.9f;
+            prompt.Width.Pixels = optionSize;
+            prompt.HAlign = 0.5f;
+            prompt.VAlign = 0.05f;
+
+            countdown.HAlign = 0.95f;
+            countdown.VAlign = 0.05f;
 
             Append(prompt);
 

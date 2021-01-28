@@ -154,7 +154,10 @@ namespace Slackenhash
 			game = new Game();
 
 			showingModal = false;
+			modalUI = new ModalUI();
+			modalUI.Activate();
 			_modalUI = new UserInterface();
+			_modalUI.SetState(modalUI);
 
 			showingPrompt = false;
 			_promptUI = new UserInterface();
@@ -170,10 +173,10 @@ namespace Slackenhash
 			_historyUI.SetState(historyUI);
 		}
 
-		public void Foo(UIMouseEvent evt, UIElement listener)
-		{
-
-		}
+		public void UpdatePower()
+        {
+			playerUI.Show();
+        }
 
 		public void AddHistoryLog(string entry)
 		{
@@ -182,23 +185,18 @@ namespace Slackenhash
 
 		public void ShowModal(string title, UIElement element)
 		{
-			if (showingModal)
-			{
-				HideModal();
-			}
-
 			showingModal = true;
 
-			modalUI = new ModalUI(title, element);
-			modalUI.Activate();
-			_modalUI.SetState(modalUI);
+			modalUI.SetTitle(title);
+			modalUI.SetElement(element);
+			modalUI.Build();
 		}
 
 		public void HideModal()
 		{
 			showingModal = false;
 
-			modalUI.Remove();
+			modalUI.Clear();
 		}
 
 		public void ShowPrompt(string title, List<(string, UIElement.MouseEvent)> options, int duration = 15)
@@ -234,59 +232,71 @@ namespace Slackenhash
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
 		{
             List<string> disabledLayers = new List<string> { "Vanilla: Hotbar", "Vanilla: Inventory", "Vanilla: Info Accessories Bar", "Vanilla: Builder Accessories Bar", "Vanilla: Map / Minimap", "Vanilla: Resource Bars" };
-            foreach (GameInterfaceLayer layer in layers)
+			int inventoryLayerIndex = -1;
+			int i = 0;
+			foreach (GameInterfaceLayer layer in layers)
             {
                 if (disabledLayers.Contains(layer.Name))
                 {
                     layer.Active = false;
                 }
+
+				if (layer.Name == "Vanilla: Mouse Text")
+                {
+					inventoryLayerIndex = i;
+                }
+
+				i++;
             }
 
-            layers.Add(new LegacyGameInterfaceLayer(
-				"Slackenhash: Players",
-				delegate
-				{
-					_playerUI.Draw(Main.spriteBatch, new GameTime());
-					return true;
-				},
-				InterfaceScaleType.UI
-			));
-
-			layers.Add(new LegacyGameInterfaceLayer(
-				"Slackenhash: History",
-				delegate
-				{
-					_historyUI.Draw(Main.spriteBatch, new GameTime());
-					return true;
-				},
-				InterfaceScaleType.UI
-			));
-
-			layers.Add(new LegacyGameInterfaceLayer(
-                "Slackenhash: Modal",
-                delegate
-                {
-                    if (showingModal && modalUI != null)
-                    {
-						_modalUI.Draw(Main.spriteBatch, new GameTime());
-					}
-                    return true;
-                },
-                InterfaceScaleType.UI
-            ));
-
-			layers.Add(new LegacyGameInterfaceLayer(
-				"Slackenhash: Prompt",
-				delegate
-				{
-					if (showingPrompt)
+			if (inventoryLayerIndex != -1)
+			{
+				layers.Insert(inventoryLayerIndex, new LegacyGameInterfaceLayer(
+					"Slackenhash: Prompt",
+					delegate
 					{
-						_promptUI.Draw(Main.spriteBatch, new GameTime());
-					}
-					return true;
-				},
-				InterfaceScaleType.UI
-			));
+						if (showingPrompt)
+						{
+							_promptUI.Draw(Main.spriteBatch, new GameTime());
+						}
+						return true;
+					},
+					InterfaceScaleType.UI
+				));
+				layers.Insert(inventoryLayerIndex, new LegacyGameInterfaceLayer(
+					"Slackenhash: History",
+					delegate
+					{
+						_historyUI.Draw(Main.spriteBatch, new GameTime());
+						return true;
+					},
+					InterfaceScaleType.UI
+				));
+
+				layers.Insert(inventoryLayerIndex, new LegacyGameInterfaceLayer(
+						"Slackenhash: Players",
+						delegate
+						{
+							_playerUI.Draw(Main.spriteBatch, new GameTime());
+							return true;
+						},
+						InterfaceScaleType.UI
+					)
+				);
+
+				layers.Insert(inventoryLayerIndex, new LegacyGameInterfaceLayer(
+					"Slackenhash: Modal",
+					delegate
+					{
+						if (showingModal && modalUI != null)
+						{
+							_modalUI.Draw(Main.spriteBatch, new GameTime());
+						}
+						return true;
+					},
+					InterfaceScaleType.UI
+				));
+			}
 		}
 	}
 }

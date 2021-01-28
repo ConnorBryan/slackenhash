@@ -113,6 +113,7 @@ namespace Slackenhash.UI
             primaryAction.Top.Percent = 0.95f;
             primaryAction.PaddingTop = 5f;
             primaryAction.PaddingBottom = 5f;
+            primaryAction.OnMouseDown += new MouseEvent(sourceCard.OnPrimary);
             bottom.Append(primaryAction);
 
             UITextPanel<string> secondaryAction = new UITextPanel<string>("Toss", 0.5f);

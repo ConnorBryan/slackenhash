@@ -7,8 +7,6 @@ namespace Slackenhash.UI
     {
         public ListUI list;
 
-        private ModalUI modalUI;
-
         public override void OnInitialize()
         {
 
@@ -17,10 +15,7 @@ namespace Slackenhash.UI
 
             list.list.Width.Pixels = 230;
 
-            modalUI = new ModalUI("History", list.list, false);
-            modalUI.Activate();
-
-            Append(modalUI);
+            Slackenhash.instance.ShowModal("History", list);
         }
 
         public void Add(string entry)

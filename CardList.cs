@@ -13,7 +13,13 @@ namespace Slackenhash
                 "An example foe.",
                 1,
                 Slackenhash.EquipmentSlot.None,
-                0
+                0,
+                new Equipment(
+                    "Example Headwear",
+                    1,
+                    Slackenhash.EquipmentSlot.None,
+                    false
+                )
             )
         };
 
@@ -27,6 +33,12 @@ namespace Slackenhash
                 1,
                 Slackenhash.EquipmentSlot.Headwear,
                 250,
+                new Equipment(
+                    "Example Headwear",
+                    1,
+                    Slackenhash.EquipmentSlot.Headwear,
+                    true
+                ),
                 true
             )
         };

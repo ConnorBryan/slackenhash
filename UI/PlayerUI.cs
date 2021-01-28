@@ -8,7 +8,7 @@ namespace Slackenhash.UI
     internal class PlayerUI : UIState
     {
         public List<UIPanel> players;
-        List<SlackenhashPlayer> allPlayers;
+        public List<SlackenhashPlayer> sourcePlayers;
 
         public override void OnInitialize()
         {
@@ -17,13 +17,16 @@ namespace Slackenhash.UI
 
         public void Show()
         {
-            allPlayers = new List<SlackenhashPlayer>()
+            RemoveAllChildren();
+
+            players = new List<UIPanel>();
+            sourcePlayers = new List<SlackenhashPlayer>()
             {
                 Main.LocalPlayer.GetModPlayer<SlackenhashPlayer>(),
             };
 
             int playerIndex = 0;
-            foreach (SlackenhashPlayer somePlayer in allPlayers)
+            foreach (SlackenhashPlayer somePlayer in sourcePlayers)
             {
                 UIPanel playerPanel = new UIPanel();
                 playerPanel.Width.Pixels = Slackenhash.PLAYER_WIDTH;
@@ -38,7 +41,7 @@ namespace Slackenhash.UI
 
                 playerPanel.Append(power);
 
-                UIText name = new UIText(somePlayer.player.name, 0.8f);
+                UIText name = new UIText(somePlayer.player.name.ToUpper(), 0.8f);
                 name.Top.Pixels = 5;
                 name.Left.Pixels = 45;
 
@@ -50,13 +53,13 @@ namespace Slackenhash.UI
 
                 playerPanel.Append(raceClass);
 
-                UIText levelChamber = new UIText(Slackenhash.LEVEL_NAME_LOOKUP[somePlayer.level] + " " + Slackenhash.ROMAN_NUMERAL_LOOKUP[somePlayer.chamber], 0.6f);
+                UIText levelChamber = new UIText(Slackenhash.LEVEL_NAME_LOOKUP[somePlayer.level] + " " + Slackenhash.ROMAN_NUMERAL_LOOKUP[somePlayer.chamber], 0.5f);
                 levelChamber.Top.Pixels = 45;
                 levelChamber.Left.Pixels = 45;
 
                 playerPanel.Append(levelChamber);
 
-                UITextPanel<string> handButton = new UITextPanel<string>("Hand", 0.6f);
+                UITextPanel<string> handButton = new UITextPanel<string>("Hand".ToUpper(), 0.6f);
                 handButton.Height.Pixels = 5;
                 handButton.Height.Percent = 0;
                 handButton.Width.Pixels = 20;
@@ -66,7 +69,7 @@ namespace Slackenhash.UI
 
                 playerPanel.Append(handButton);
 
-                UITextPanel<string> equipmentButton = new UITextPanel<string>("Equipment", 0.6f);
+                UITextPanel<string> equipmentButton = new UITextPanel<string>("Equipment".ToUpper(), 0.5f);
                 equipmentButton.Height.Pixels = 5;
                 equipmentButton.Height.Percent = 0;
                 equipmentButton.Width.Pixels = 25;
@@ -76,7 +79,7 @@ namespace Slackenhash.UI
 
                 playerPanel.Append(equipmentButton);
 
-                UITextPanel<string> actionsButton = new UITextPanel<string>("Actions", 0.6f);
+                UITextPanel<string> actionsButton = new UITextPanel<string>("Actions".ToUpper(), 0.5f);
                 actionsButton.Height.Pixels = 5;
                 actionsButton.Height.Percent = 0;
                 actionsButton.Width.Pixels = 25;
@@ -89,6 +92,8 @@ namespace Slackenhash.UI
                 Append(playerPanel);
 
                 players.Add(playerPanel);
+
+                somePlayer.index = playerIndex;
 
                 playerIndex++;
             }
@@ -107,7 +112,7 @@ namespace Slackenhash.UI
                 }
             }
 
-            SlackenhashPlayer relevantPlayer = allPlayers[index];
+            SlackenhashPlayer relevantPlayer = sourcePlayers[index];
 
             return relevantPlayer;
         }
@@ -121,6 +126,7 @@ namespace Slackenhash.UI
                 ListUI handPanel = new ListUI();
                 handPanel.Activate();
 
+                
                 foreach (Card card in relevantPlayer.hand)
                 {
                     handPanel.Add(card.title, OnClickCard);

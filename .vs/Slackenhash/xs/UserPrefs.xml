@@ -1,20 +1,19 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="UI/DragableUIPanel.cs" Line="41" Column="1" />
-      <File FileName="UI/PromptUI.cs" Line="51" Column="14" />
-      <File FileName="UI/ModalUI.cs" Line="93" Column="66" />
-      <File FileName="Game.cs" Line="166" Column="33" />
-      <File FileName="SlackenhashPlayer.cs" Line="152" Column="1" />
-      <File FileName="UI/PlayerUI.cs" Line="1" Column="1" />
+      <File FileName="UI/PlayerUI.cs" Line="13" Column="22" />
+      <File FileName="UI/ModalUI.cs" Line="1" Column="1" />
+      <File FileName="Slackenhash.cs" Line="165" Column="28" />
+      <File FileName="UI/ListUI.cs" Line="39" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Slackenhash" expanded="True">
             <Node name="Slackenhash" expanded="True">
-              <Node name="UI" expanded="True" />
-              <Node name="SlackenhashPlayer.cs" selected="True" />
+              <Node name="UI" expanded="True">
+                <Node name="PlayerUI.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>

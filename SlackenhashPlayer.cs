@@ -12,6 +12,7 @@ namespace Slackenhash
         public List<Card> hand;
         public List<Equipment> equipment;
         public List<string> actions;
+        public int index = -1;
         public int chamber = 1;
         public int level = 1;
         public string foe;
@@ -23,7 +24,7 @@ namespace Slackenhash
                 int fromEquipment = 0;
                 foreach (Equipment item in equipment)
                 {
-                    fromEquipment += item.bonus;
+                    fromEquipment += item.power;
                 }
 
                 return level + fromEquipment;
@@ -36,6 +37,45 @@ namespace Slackenhash
             hand = new List<Card>();
             equipment = new List<Equipment>();
             actions = new List<string>();
+        }
+
+        public bool EquipItem(Equipment item)
+        {
+            int previousSlotItemIndex = -1;
+            int i = 0;
+            bool hasBigItemAlready = false;
+
+            foreach (Equipment _item in equipment)
+            {
+                if (_item.isBig)
+                {
+                    hasBigItemAlready = true;
+                }
+
+                if (_item.slot == item.slot)
+                {
+                    previousSlotItemIndex = i;
+                }
+
+                i++;
+            }
+
+            if (item.isBig && hasBigItemAlready)
+            {
+                return false;
+            } else
+            {
+                if (previousSlotItemIndex != -1)
+                {
+                    equipment.RemoveAt(previousSlotItemIndex);
+                }
+
+                equipment.Add(item);
+
+                Slackenhash.instance.UpdatePower();
+
+                return true;
+            }
         }
 
         public void DealCard(Card card)
