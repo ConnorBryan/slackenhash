@@ -1,0 +1,3 @@
+displayName = Slackenhash
+author = Connor Bryan
+version = 0.1

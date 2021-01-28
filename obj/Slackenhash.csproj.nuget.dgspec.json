@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/connorbryan/Library/Application Support/Terraria/ModLoader/Mod Sources/Slackenhash/Slackenhash.csproj": {}
+  },
+  "projects": {
+    "/Users/connorbryan/Library/Application Support/Terraria/ModLoader/Mod Sources/Slackenhash/Slackenhash.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/connorbryan/Library/Application Support/Terraria/ModLoader/Mod Sources/Slackenhash/Slackenhash.csproj",
+        "projectName": "Slackenhash",
+        "projectPath": "/Users/connorbryan/Library/Application Support/Terraria/ModLoader/Mod Sources/Slackenhash/Slackenhash.csproj",
+        "packagesPath": "/Users/connorbryan/.nuget/packages/",
+        "outputPath": "/Users/connorbryan/Library/Application Support/Terraria/ModLoader/Mod Sources/Slackenhash/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/connorbryan/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net45"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net45": {
+            "targetAlias": "net45",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net45": {
+          "targetAlias": "net45",
+          "dependencies": {
+            "tModLoader.CodeAssist": {
+              "target": "Package",
+              "version": "[0.1.*, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
